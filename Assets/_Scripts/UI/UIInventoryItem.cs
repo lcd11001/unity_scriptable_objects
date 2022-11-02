@@ -17,6 +17,9 @@ public class UIInventoryItem : MonoBehaviour
 
     private bool empty = true;
 
+    public Sprite ItemImage { get => itemImage.sprite; set => itemImage.sprite = value; }
+    public string ItemQuantity { get => quantityTxt.text; set => quantityTxt.text = value; }
+
     public void Awake()
     {
         ResetData();
@@ -42,8 +45,8 @@ public class UIInventoryItem : MonoBehaviour
     public void SetData(Sprite sprite, int quantity)
     {
         this.itemImage.gameObject.SetActive(true);
-        this.itemImage.sprite = sprite;
-        this.quantityTxt.text = $"{quantity}";
+        this.ItemImage = sprite;
+        this.ItemQuantity = $"{quantity}";
         this.empty = false;
     }
 
