@@ -13,6 +13,7 @@ public class UIInventoryPage : MonoBehaviour
 
     private List<UIInventoryItem> listUIItems = new List<UIInventoryItem>();
     private int currentDraggedItemIndex = -1;
+    private int currentSelectedItemIndex = -1;
 
     public Sprite sprite, sprite2;
     public int quantity;
@@ -32,6 +33,7 @@ public class UIInventoryPage : MonoBehaviour
         for (int i = 0; i < inventorySize; i++)
         {
             UIInventoryItem uiItem = Instantiate(itemPrefab, Vector3.zero, Quaternion.identity, contentPanel);
+            uiItem.name += $" {i}";
 
             uiItem.onItemClicked += HandleItemSelection;
             uiItem.onItemBeginDrag += HandleItemBeginDrag;
@@ -65,7 +67,7 @@ public class UIInventoryPage : MonoBehaviour
         if (currentDraggedItemIndex > -1)
         {
             listUIItems[currentDraggedItemIndex].SetData(index == 0 ? sprite : sprite2, quantity);
-            listUIItems[index].SetData(index == 0 ? sprite : sprite2, quantity);
+            listUIItems[index].SetData(currentDraggedItemIndex == 0 ? sprite : sprite2, quantity);
             TurnOffMouseFollower();
         }
     }
@@ -97,8 +99,22 @@ public class UIInventoryPage : MonoBehaviour
 
     private void HandleItemSelection(UIInventoryItem item)
     {
-        itemDescription.SetDescription(sprite, title, description);
-        listUIItems[0].Select();
+        int index = listUIItems.IndexOf(item);
+        if (index == -1)
+        {
+            return;
+        }
+
+        if (currentSelectedItemIndex != -1)
+        {
+            listUIItems[currentSelectedItemIndex].Deselect();
+        }
+
+
+        itemDescription.SetDescription(item.ItemImage, title, description);
+        listUIItems[index].Select();
+        
+        currentSelectedItemIndex = index;
     }
 
     public void Show()

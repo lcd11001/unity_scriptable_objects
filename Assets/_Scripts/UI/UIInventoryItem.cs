@@ -78,7 +78,10 @@ public class UIInventoryItem : MonoBehaviour, IPointerClickHandler, IBeginDragHa
 
     public void OnDrop(PointerEventData eventData)
     {
-        onItemDroppedOn?.Invoke(this);
+        if (eventData.pointerDrag != null)
+        {          
+            onItemDroppedOn?.Invoke(this);
+        }
     }
 
     public void OnDrag(PointerEventData eventData)
