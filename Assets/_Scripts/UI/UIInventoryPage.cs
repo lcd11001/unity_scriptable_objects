@@ -11,10 +11,10 @@ public class UIInventoryPage : MonoBehaviour
     [SerializeField] private UIInventoryDescription itemDescription;
     [SerializeField] private UIInventoryMouseFollower mouseFollower;
 
+    private List<UIInventoryItem> listUIItems = new List<UIInventoryItem>();
+    private int currentDraggedItemIndex = -1;
 
-    List<UIInventoryItem> listUIItems = new List<UIInventoryItem>();
-
-    public Sprite sprite;
+    public Sprite sprite, sprite2;
     public int quantity;
     public string title, description;
 
@@ -23,7 +23,7 @@ public class UIInventoryPage : MonoBehaviour
         // contentPanel.transform.DetachChildren();
 
         Hide();
-        mouseFollower.Toggle(false);
+        TurnOffMouseFollower();
         itemDescription.ResetDescription();
     }
 
@@ -51,19 +51,47 @@ public class UIInventoryPage : MonoBehaviour
 
     private void HandleItemEndDrag(UIInventoryItem item)
     {
-        mouseFollower.Toggle(false);
+        TurnOffMouseFollower();
     }
 
     private void HandleItemSwap(UIInventoryItem item)
     {
+        int index = listUIItems.IndexOf(item);
+        if (index == -1)
+        {
+            TurnOffMouseFollower();
+            return;
+        }
 
+        listUIItems[currentDraggedItemIndex].SetData(index == 0 ? sprite : sprite2, quantity);
+        listUIItems[index].SetData(index == 0 ? sprite : sprite2, quantity);
+        TurnOffMouseFollower();
+    }
+
+    private void TurnOffMouseFollower()
+    {
+        mouseFollower.Toggle(false);
+        currentDraggedItemIndex = -1;
+    }
+
+    private void TurnOnMouseFollower(int index)
+    {
+        currentDraggedItemIndex = index;
+        mouseFollower.Toggle(true);
     }
 
     private void HandleItemBeginDrag(UIInventoryItem item)
     {
-        mouseFollower.Toggle(true);
-        mouseFollower.SetData(sprite, quantity);
-    }
+        int index = listUIItems.IndexOf(item);
+        if (index == -1)
+        {
+            return;
+        }
+
+        TurnOnMouseFollower(index);
+
+        mouseFollower.SetData(index == 0 ? sprite : sprite2, quantity);
+    }   
 
     private void HandleItemSelection(UIInventoryItem item)
     {
@@ -77,10 +105,12 @@ public class UIInventoryPage : MonoBehaviour
         itemDescription.ResetDescription();
 
         listUIItems[0].SetData(sprite, quantity);
+        listUIItems[1].SetData(sprite2, quantity);
     }
 
     public void Hide()
     {
         gameObject.SetActive(false);
+        TurnOffMouseFollower();
     }
 }
