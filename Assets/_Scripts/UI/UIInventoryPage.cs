@@ -31,8 +31,7 @@ public class UIInventoryPage : MonoBehaviour
     {
         for (int i = 0; i < inventorySize; i++)
         {
-            UIInventoryItem uiItem = Instantiate(itemPrefab, Vector3.zero, Quaternion.identity);
-            uiItem.transform.SetParent(contentPanel);
+            UIInventoryItem uiItem = Instantiate(itemPrefab, Vector3.zero, Quaternion.identity, contentPanel);
 
             uiItem.onItemClicked += HandleItemSelection;
             uiItem.onItemBeginDrag += HandleItemBeginDrag;
@@ -63,9 +62,12 @@ public class UIInventoryPage : MonoBehaviour
             return;
         }
 
-        listUIItems[currentDraggedItemIndex].SetData(index == 0 ? sprite : sprite2, quantity);
-        listUIItems[index].SetData(index == 0 ? sprite : sprite2, quantity);
-        TurnOffMouseFollower();
+        if (currentDraggedItemIndex > -1)
+        {
+            listUIItems[currentDraggedItemIndex].SetData(index == 0 ? sprite : sprite2, quantity);
+            listUIItems[index].SetData(index == 0 ? sprite : sprite2, quantity);
+            TurnOffMouseFollower();
+        }
     }
 
     private void TurnOffMouseFollower()
@@ -91,7 +93,7 @@ public class UIInventoryPage : MonoBehaviour
         TurnOnMouseFollower(index);
 
         mouseFollower.SetData(index == 0 ? sprite : sprite2, quantity);
-    }   
+    }
 
     private void HandleItemSelection(UIInventoryItem item)
     {

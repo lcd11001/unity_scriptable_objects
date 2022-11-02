@@ -505,7 +505,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 965124189569841360}
   m_Direction: 2
   m_Value: 0
-  m_Size: 1
+  m_Size: 0.99999994
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -628,11 +628,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b815f1628a484654ca0be574b4327081, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemPrefab: {fileID: 470940998693664047, guid: 6de85d31278a347478c9701e4179ede1, type: 3}
+  itemPrefab: {fileID: 4840518825552208411, guid: 6de85d31278a347478c9701e4179ede1, type: 3}
   contentPanel: {fileID: 965124190482920713}
   itemDescription: {fileID: 8222429288088159984}
   mouseFollower: {fileID: 0}
   sprite: {fileID: 21300000, guid: dd3631e297d7ef341bfc48751be7ca9d, type: 3}
+  sprite2: {fileID: 21300000, guid: c282d3bf50e9501488c050ae9cc3be2f, type: 3}
   quantity: 1
   title: Sword
   description: Cuts thing
@@ -931,10 +932,10 @@ RectTransform:
   m_Father: {fileID: 965124189146316623}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 0, y: -0}
-  m_SizeDelta: {x: 433.81787, y: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!222 &965124188887530040
 CanvasRenderer:
@@ -1542,8 +1543,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 965124189777637070}
   m_HandleRect: {fileID: 965124189777637069}
   m_Direction: 2
-  m_Value: 1
-  m_Size: 0.9321426
+  m_Value: 0.9999977
+  m_Size: 0.931141
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:

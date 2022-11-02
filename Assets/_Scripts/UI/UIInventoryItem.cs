@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class UIInventoryItem : MonoBehaviour
+public class UIInventoryItem : MonoBehaviour, IPointerClickHandler, IBeginDragHandler, IDragHandler, IEndDragHandler, IDropHandler
 {
     [SerializeField] private Image itemImage;
     [SerializeField] private TMP_Text quantityTxt;
@@ -50,27 +50,11 @@ public class UIInventoryItem : MonoBehaviour
         this.empty = false;
     }
 
-    public void OnBeginDrag()
-    {
-        if (empty) return;
-        onItemBeginDrag?.Invoke(this);
-    }
-
-    public void OnDrop()
-    {
-        onItemDroppedOn?.Invoke(this);
-    }
-
-    public void OnEndDrag()
-    {
-        onItemEndDrag?.Invoke(this);
-    }
-
-    public void OnPointerClicked(BaseEventData data)
+    public void OnPointerClick(PointerEventData eventData)
     {
         if (empty) return;
 
-        PointerEventData pointerData = (PointerEventData)data;
+        PointerEventData pointerData = (PointerEventData)eventData;
         if (pointerData.button == PointerEventData.InputButton.Right)
         {
             onRightMouseClicked?.Invoke(this);
@@ -79,5 +63,27 @@ public class UIInventoryItem : MonoBehaviour
         {
             onItemClicked?.Invoke(this);
         }
+    }
+
+    public void OnBeginDrag(PointerEventData eventData)
+    {
+        if (empty) return;
+        onItemBeginDrag?.Invoke(this);
+    }
+
+    public void OnEndDrag(PointerEventData eventData)
+    {
+        onItemEndDrag?.Invoke(this);
+    }
+
+    public void OnDrop(PointerEventData eventData)
+    {
+        onItemDroppedOn?.Invoke(this);
+    }
+
+    public void OnDrag(PointerEventData eventData)
+    {
+        // https://docs.unity3d.com/2019.1/Documentation/ScriptReference/EventSystems.IBeginDragHandler.html
+        // Note: You need to implement IDragHandler in addition to IBeginDragHandler.
     }
 }
