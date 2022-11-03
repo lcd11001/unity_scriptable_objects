@@ -15,16 +15,15 @@ public class UIInventoryPage : MonoBehaviour
     private int currentDraggedItemIndex = -1;
     private int currentSelectedItemIndex = -1;
 
-    public Sprite sprite, sprite2;
-    public int quantity;
-    public string title, description;
+    public event Action<int> onDescriptionRequested, onItemActionRequested, onStartDragging;
+    public event Action<int, int> onSwapItems;
 
     private void Awake()
     {
         // contentPanel.transform.DetachChildren();
 
         Hide();
-        TurnOffMouseFollower();
+        ResetDraggedItem();
         itemDescription.ResetDescription();
     }
 
@@ -45,6 +44,40 @@ public class UIInventoryPage : MonoBehaviour
         }
     }
 
+    public void UpdateData(int itemIndex, Sprite itemImage, int itemQuantity)
+    {
+        if (itemIndex < listUIItems.Count)
+        {
+            listUIItems[itemIndex].SetData(itemImage, itemQuantity);
+        }
+    }
+
+    public void CreateDragItem(Sprite itemImage, int itemQuantity)
+    {
+        mouseFollower.Toggle(true);
+        mouseFollower.SetData(itemImage, itemQuantity);
+    }
+
+    private void ResetDraggedItem()
+    {
+        mouseFollower.Toggle(false);
+        currentDraggedItemIndex = -1;
+    }
+
+    private void ResetSelection()
+    {
+        itemDescription.ResetDescription();
+        DeselectAllItems();
+    }
+
+    private void DeselectAllItems()
+    {
+        foreach (UIInventoryItem item in listUIItems)
+        {
+            item.Deselect();
+        }
+    }
+
     private void HandleItemShowActions(UIInventoryItem item)
     {
 
@@ -52,7 +85,7 @@ public class UIInventoryPage : MonoBehaviour
 
     private void HandleItemEndDrag(UIInventoryItem item)
     {
-        TurnOffMouseFollower();
+        ResetDraggedItem();
     }
 
     private void HandleItemSwap(UIInventoryItem item)
@@ -60,28 +93,10 @@ public class UIInventoryPage : MonoBehaviour
         int index = listUIItems.IndexOf(item);
         if (index == -1)
         {
-            TurnOffMouseFollower();
             return;
         }
 
-        if (currentDraggedItemIndex > -1)
-        {
-            listUIItems[currentDraggedItemIndex].SetData(index == 0 ? sprite : sprite2, quantity);
-            listUIItems[index].SetData(currentDraggedItemIndex == 0 ? sprite : sprite2, quantity);
-            TurnOffMouseFollower();
-        }
-    }
-
-    private void TurnOffMouseFollower()
-    {
-        mouseFollower.Toggle(false);
-        currentDraggedItemIndex = -1;
-    }
-
-    private void TurnOnMouseFollower(int index)
-    {
-        currentDraggedItemIndex = index;
-        mouseFollower.Toggle(true);
+        onSwapItems?.Invoke(currentDraggedItemIndex, index);
     }
 
     private void HandleItemBeginDrag(UIInventoryItem item)
@@ -91,10 +106,10 @@ public class UIInventoryPage : MonoBehaviour
         {
             return;
         }
+        HandleItemSelection(item);
 
-        TurnOnMouseFollower(index);
-
-        mouseFollower.SetData(index == 0 ? sprite : sprite2, quantity);
+        currentDraggedItemIndex = index;
+        onStartDragging?.Invoke(index);
     }
 
     private void HandleItemSelection(UIInventoryItem item)
@@ -109,26 +124,20 @@ public class UIInventoryPage : MonoBehaviour
         {
             listUIItems[currentSelectedItemIndex].Deselect();
         }
-
-
-        itemDescription.SetDescription(item.ItemImage, title, description);
-        listUIItems[index].Select();
-        
         currentSelectedItemIndex = index;
+        
+        onDescriptionRequested?.Invoke(index);
     }
 
     public void Show()
     {
         gameObject.SetActive(true);
-        itemDescription.ResetDescription();
-
-        listUIItems[0].SetData(sprite, quantity);
-        listUIItems[1].SetData(sprite2, quantity);
+        ResetSelection();
     }
 
     public void Hide()
     {
         gameObject.SetActive(false);
-        TurnOffMouseFollower();
+        ResetDraggedItem();
     }
 }

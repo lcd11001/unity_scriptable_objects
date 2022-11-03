@@ -28,17 +28,24 @@ public class UIInventoryItem : MonoBehaviour, IPointerClickHandler, IBeginDragHa
 
     public void Deselect()
     {
-        this.borderImage.enabled = false;
+        if (!this.empty)
+        {
+            this.borderImage.enabled = false;
+        }
     }
 
     public void Select()
     {
-        this.borderImage.enabled = true;
+        if (!this.empty)
+        {
+            this.borderImage.enabled = true;
+        }
     }
 
     public void ResetData()
     {
         this.itemImage.gameObject.SetActive(false);
+        this.borderImage.enabled = false;
         this.empty = true;
     }
 
@@ -52,7 +59,8 @@ public class UIInventoryItem : MonoBehaviour, IPointerClickHandler, IBeginDragHa
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        if (empty) return;
+        // we need deselect other item, when click on empty item.
+        // if (empty) return;
 
         PointerEventData pointerData = (PointerEventData)eventData;
         if (pointerData.button == PointerEventData.InputButton.Right)
@@ -79,7 +87,7 @@ public class UIInventoryItem : MonoBehaviour, IPointerClickHandler, IBeginDragHa
     public void OnDrop(PointerEventData eventData)
     {
         if (eventData.pointerDrag != null)
-        {          
+        {
             onItemDroppedOn?.Invoke(this);
         }
     }
