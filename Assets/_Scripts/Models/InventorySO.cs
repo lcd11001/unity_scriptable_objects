@@ -39,6 +39,11 @@ public class InventorySO : ScriptableObject
         .Where(obj => !obj.Value.IsEmpty)
         .ToDictionary(keySelector: obj => obj.Key, elementSelector: obj => obj.Value);
     }
+
+    public InventoryItem GetItemAt(int index)
+    {
+        return inventoryItems[index];
+    }
 }
 
 // Why struct?

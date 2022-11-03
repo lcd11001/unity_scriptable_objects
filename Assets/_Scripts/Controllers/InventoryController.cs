@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,8 +10,37 @@ public class InventoryController : MonoBehaviour
 
     private void Start()
     {
-        inventoryUI.InitInventoryUI(inventoryData.Size);
+        PrepareUI();
         // inventoryData.Init();
+    }
+
+    private void PrepareUI()
+    {
+        inventoryUI.InitInventoryUI(inventoryData.Size);
+        RegisterEvents();
+    }
+
+    private void OnDestroy()
+    {
+        UnregisterEvents();
+    }
+
+    private void RegisterEvents()
+    {
+        Debug.Log("InventoryController::RegisterEvents");
+        inventoryUI.onDescriptionRequested += HandleDescriptionRequest;
+        inventoryUI.onItemActionRequested += HandleItemActionRequest;
+        inventoryUI.onStartDragging += HandleStartDragging;
+        inventoryUI.onSwapItems += HandleSwapItems;
+    }
+
+    private void UnregisterEvents()
+    {
+        Debug.Log("InventoryController::UnregisterEvents");
+        inventoryUI.onDescriptionRequested -= HandleDescriptionRequest;
+        inventoryUI.onItemActionRequested -= HandleItemActionRequest;
+        inventoryUI.onStartDragging -= HandleStartDragging;
+        inventoryUI.onSwapItems -= HandleSwapItems;
     }
 
     private void Update()
@@ -33,5 +63,32 @@ public class InventoryController : MonoBehaviour
 
             }
         }
+    }
+
+    private void HandleSwapItems(int currentIndex, int index)
+    {
+        
+    }
+
+    private void HandleStartDragging(int index)
+    {
+        
+    }
+
+    private void HandleItemActionRequest(int index)
+    {
+        
+    }
+
+    private void HandleDescriptionRequest(int index)
+    {
+        InventoryItem inventoryItem = inventoryData.GetItemAt(index);
+        if (inventoryItem.IsEmpty)
+        {
+            inventoryUI.ResetSelection();
+            return;
+        }
+        ItemSO item = inventoryItem.item;
+        inventoryUI.UpdateDescription(index, item.Image, item.Name, item.Description);
     }
 }

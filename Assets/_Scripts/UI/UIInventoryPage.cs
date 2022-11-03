@@ -13,7 +13,6 @@ public class UIInventoryPage : MonoBehaviour
 
     private List<UIInventoryItem> listUIItems = new List<UIInventoryItem>();
     private int currentDraggedItemIndex = -1;
-    private int currentSelectedItemIndex = -1;
 
     public event Action<int> onDescriptionRequested, onItemActionRequested, onStartDragging;
     public event Action<int, int> onSwapItems;
@@ -27,21 +26,47 @@ public class UIInventoryPage : MonoBehaviour
         itemDescription.ResetDescription();
     }
 
+    private void OnDestroy()
+    {
+        UnregisterEvents();
+    }
+
+    private void UnregisterEvents()
+    {
+        Debug.Log("UIInventoryPage::UnregisterEvents");
+        foreach (var uiItem in listUIItems)
+        {
+            uiItem.onItemClicked -= HandleItemSelection;
+            uiItem.onItemBeginDrag -= HandleItemBeginDrag;
+            uiItem.onItemDroppedOn -= HandleItemSwap;
+            uiItem.onItemEndDrag -= HandleItemEndDrag;
+            uiItem.onRightMouseClicked -= HandleItemShowActions;
+        }
+    }
+
+    private void RegisterEvents()
+    {
+        Debug.Log("UIInventoryPage::RegisterEvents");
+        foreach (var uiItem in listUIItems)
+        {
+            uiItem.onItemClicked += HandleItemSelection;
+            uiItem.onItemBeginDrag += HandleItemBeginDrag;
+            uiItem.onItemDroppedOn += HandleItemSwap;
+            uiItem.onItemEndDrag += HandleItemEndDrag;
+            uiItem.onRightMouseClicked += HandleItemShowActions;
+        }
+    }
+
     public void InitInventoryUI(int inventorySize)
     {
         for (int i = 0; i < inventorySize; i++)
         {
             UIInventoryItem uiItem = Instantiate(itemPrefab, Vector3.zero, Quaternion.identity, contentPanel);
             uiItem.name += $" {i}";
-
-            uiItem.onItemClicked += HandleItemSelection;
-            uiItem.onItemBeginDrag += HandleItemBeginDrag;
-            uiItem.onItemDroppedOn += HandleItemSwap;
-            uiItem.onItemEndDrag += HandleItemEndDrag;
-            uiItem.onRightMouseClicked += HandleItemShowActions;
-
             listUIItems.Add(uiItem);
         }
+
+        RegisterEvents();
     }
 
     public void UpdateData(int itemIndex, Sprite itemImage, int itemQuantity)
@@ -50,6 +75,14 @@ public class UIInventoryPage : MonoBehaviour
         {
             listUIItems[itemIndex].SetData(itemImage, itemQuantity);
         }
+    }
+
+    public void UpdateDescription(int index, Sprite image, string name, string description)
+    {
+        DeselectAllItems();
+        SelectItem(index);
+
+        this.itemDescription.SetDescription(image, name, description);
     }
 
     public void CreateDragItem(Sprite itemImage, int itemQuantity)
@@ -64,7 +97,7 @@ public class UIInventoryPage : MonoBehaviour
         currentDraggedItemIndex = -1;
     }
 
-    private void ResetSelection()
+    public void ResetSelection()
     {
         itemDescription.ResetDescription();
         DeselectAllItems();
@@ -76,6 +109,11 @@ public class UIInventoryPage : MonoBehaviour
         {
             item.Deselect();
         }
+    }
+
+    private void SelectItem(int index)
+    {
+        listUIItems[index].Select();
     }
 
     private void HandleItemShowActions(UIInventoryItem item)
@@ -120,12 +158,6 @@ public class UIInventoryPage : MonoBehaviour
             return;
         }
 
-        if (currentSelectedItemIndex != -1)
-        {
-            listUIItems[currentSelectedItemIndex].Deselect();
-        }
-        currentSelectedItemIndex = index;
-        
         onDescriptionRequested?.Invoke(index);
     }
 
