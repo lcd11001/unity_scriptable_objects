@@ -4,81 +4,84 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-[CreateAssetMenu]
-public class InventorySO : ScriptableObject
+namespace Inventory.Model
 {
-    [SerializeField] private List<InventoryItem> inventoryItems;
-    [field: SerializeField] public int Size { get; private set; } = 10;
-
-    public void Init()
+    [CreateAssetMenu]
+    public class InventorySO : ScriptableObject
     {
-        inventoryItems = new List<InventoryItem>();
-        for (int i = 0; i < Size; i++)
+        [SerializeField] private List<InventoryItem> inventoryItems;
+        [field: SerializeField] public int Size { get; private set; } = 10;
+
+        public void Init()
         {
-            inventoryItems.Add(InventoryItem.GetEmptyItem());
+            inventoryItems = new List<InventoryItem>();
+            for (int i = 0; i < Size; i++)
+            {
+                inventoryItems.Add(InventoryItem.GetEmptyItem());
+            }
+        }
+
+        public void AddItem(ItemSO item, int quantity)
+        {
+            int emptyIndex = inventoryItems.FindIndex(x => x.IsEmpty);
+            if (emptyIndex != -1)
+            {
+                inventoryItems[emptyIndex] = InventoryItem.CreateItem(item, quantity);
+            }
+        }
+
+        public Dictionary<int, InventoryItem> GetCurrentInventoryState()
+        {
+            // return inventoryItems
+            // .Where(item => !item.IsEmpty)
+            // .ToDictionary(keySelector: x => x.item.ID);
+
+            return inventoryItems
+            .Select((item, index) => new KeyValuePair<int, InventoryItem>(index, item))
+            .Where(obj => !obj.Value.IsEmpty)
+            .ToDictionary(keySelector: obj => obj.Key, elementSelector: obj => obj.Value);
+        }
+
+        public InventoryItem GetItemAt(int index)
+        {
+            return inventoryItems[index];
         }
     }
 
-    public void AddItem(ItemSO item, int quantity)
+    // Why struct?
+    // https://www.youtube.com/watch?v=Ict7bCTyRok&list=PLcRSafycjWFegXSGBBf4fqIKWkHDw_G8D&index=13&t=251s
+    [Serializable]
+    public struct InventoryItem
     {
-        int emptyIndex = inventoryItems.FindIndex(x => x.IsEmpty);
-        if (emptyIndex != -1)
+        public int quantity;
+        public ItemSO item;
+        public bool IsEmpty => item == null;
+
+        public InventoryItem ChangeQuantity(int newQuantity)
         {
-            inventoryItems[emptyIndex] = InventoryItem.CreateItem(item, quantity);
+            return new InventoryItem
+            {
+                item = this.item,
+                quantity = newQuantity
+            };
         }
-    }
 
-    public Dictionary<int, InventoryItem> GetCurrentInventoryState()
-    {
-        // return inventoryItems
-        // .Where(item => !item.IsEmpty)
-        // .ToDictionary(keySelector: x => x.item.ID);
-
-        return inventoryItems
-        .Select((item, index) => new KeyValuePair<int, InventoryItem>(index, item))
-        .Where(obj => !obj.Value.IsEmpty)
-        .ToDictionary(keySelector: obj => obj.Key, elementSelector: obj => obj.Value);
-    }
-
-    public InventoryItem GetItemAt(int index)
-    {
-        return inventoryItems[index];
-    }
-}
-
-// Why struct?
-// https://www.youtube.com/watch?v=Ict7bCTyRok&list=PLcRSafycjWFegXSGBBf4fqIKWkHDw_G8D&index=13&t=251s
-[Serializable]
-public struct InventoryItem
-{
-    public int quantity;
-    public ItemSO item;
-    public bool IsEmpty => item == null;
-
-    public InventoryItem ChangeQuantity(int newQuantity)
-    {
-        return new InventoryItem
+        public static InventoryItem GetEmptyItem()
         {
-            item = this.item,
-            quantity = newQuantity
-        };
-    }
+            return new InventoryItem
+            {
+                item = null,
+                quantity = 0
+            };
+        }
 
-    public static InventoryItem GetEmptyItem()
-    {
-        return new InventoryItem
+        public static InventoryItem CreateItem(ItemSO item, int quantity)
         {
-            item = null,
-            quantity = 0
-        };
-    }
-
-    public static InventoryItem CreateItem(ItemSO item, int quantity)
-    {
-        return new InventoryItem
-        {
-            item = item,
-            quantity = quantity
-        };
+            return new InventoryItem
+            {
+                item = item,
+                quantity = quantity
+            };
+        }
     }
 }

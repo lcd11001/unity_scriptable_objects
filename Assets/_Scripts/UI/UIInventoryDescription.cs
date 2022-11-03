@@ -5,34 +5,37 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UIInventoryDescription : MonoBehaviour
+namespace Inventory.UI
 {
-    [SerializeField] private Image itemImage;
-    [SerializeField] private TMP_Text title;
-    [SerializeField] private TMP_Text description;
-
-    public string ItemTitle { get => title.text; set => title.text = value; }
-    public string ItemDescription { get => description.text; set => description.text = value; }
-    public Sprite ItemImage { get => itemImage.sprite; set => itemImage.sprite = value; }
-
-    private void Awake()
+    public class UIInventoryDescription : MonoBehaviour
     {
-        ResetDescription();
-    }
+        [SerializeField] private Image itemImage;
+        [SerializeField] private TMP_Text title;
+        [SerializeField] private TMP_Text description;
 
-    public void ResetDescription()
-    {
-        this.itemImage.gameObject.SetActive(false);
-        this.ItemTitle = "";
-        this.ItemDescription = "";
-    }
+        public string ItemTitle { get => title.text; set => title.text = value; }
+        public string ItemDescription { get => description.text; set => description.text = value; }
+        public Sprite ItemImage { get => itemImage.sprite; set => itemImage.sprite = value; }
 
-    public void SetDescription(Sprite sprite, string itemName, string itemDescription)
-    {
-        this.itemImage.gameObject.SetActive(true);
+        private void Awake()
+        {
+            ResetDescription();
+        }
 
-        this.ItemImage = sprite;
-        this.ItemTitle = itemName;
-        this.ItemDescription = itemDescription;
+        public void ResetDescription()
+        {
+            itemImage.gameObject.SetActive(false);
+            ItemTitle = "";
+            ItemDescription = "";
+        }
+
+        public void SetDescription(Sprite sprite, string itemName, string itemDescription)
+        {
+            itemImage.gameObject.SetActive(true);
+
+            ItemImage = sprite;
+            ItemTitle = itemName;
+            ItemDescription = itemDescription;
+        }
     }
 }
