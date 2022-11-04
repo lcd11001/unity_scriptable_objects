@@ -2,6 +2,7 @@ using Inventory.Model;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 [RequireComponent(typeof(SpriteRenderer), typeof(Collider2D), typeof(AudioSource))]
@@ -12,6 +13,7 @@ public class UIPickItem : MonoBehaviour
     [SerializeField] private int quantity = 1;
     [SerializeField] private AudioSource audioSource;
     [SerializeField] private float duration = 0.3f;
+    [SerializeField] private TMP_Text textQuantity;
 
     public InventoryItem data
     {
@@ -40,6 +42,10 @@ public class UIPickItem : MonoBehaviour
         if (item != null)
         {
             GetComponent<SpriteRenderer>().sprite = item.Image;
+            if (textQuantity != null)
+            {
+                textQuantity.text = $"x{quantity}";
+            }
         }
     }
 
