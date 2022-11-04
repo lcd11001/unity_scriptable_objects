@@ -60,7 +60,7 @@ namespace Inventory.Model
             int emptyIndex = inventoryItems.FindIndex(x => x.IsEmpty);
             if (emptyIndex != -1)
             {
-                inventoryItems[emptyIndex] = InventoryItem.CreateItem(item, quantity);
+                inventoryItems[emptyIndex] = InventoryItem.CreateItem(item, Math.Clamp(quantity, 0, item.MaxStackSize));
                 return inventoryItems[emptyIndex].quantity;
             }
             return 0;
@@ -113,7 +113,7 @@ namespace Inventory.Model
             return new InventoryItem
             {
                 item = this.item,
-                quantity = Math.Min(newQuantity, this.item.MaxStackSize)
+                quantity = Math.Clamp(newQuantity, 0, this.item.MaxStackSize)
             };
         }
 
@@ -148,7 +148,7 @@ namespace Inventory.Model
             return new InventoryItem
             {
                 item = item,
-                quantity = Math.Min(quantity, item.MaxStackSize)
+                quantity = quantity
             };
         }
     }

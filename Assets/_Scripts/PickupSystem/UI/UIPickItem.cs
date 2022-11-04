@@ -18,34 +18,37 @@ public class UIPickItem : MonoBehaviour
     public InventoryItem data
     {
         get => InventoryItem.CreateItem(item, quantity);
-        set
-        {
-            item = value.item;
-            quantity = value.quantity;
-        }
+    }
+
+    public void UpdateQuantity(int newQuantity)
+    {
+        quantity = newQuantity;
+
+        RefreshData();
     }
 
     private void Start()
     {
         Debug.Log("Start");
-        SetSpriteImage();
+        RefreshData();
     }
 
     private void OnValidate()
     {
         Debug.Log("OnValidate");
-        SetSpriteImage();
+        RefreshData();
     }
 
-    private void SetSpriteImage()
+    private void RefreshData()
     {
         if (item != null)
         {
             GetComponent<SpriteRenderer>().sprite = item.Image;
-            if (textQuantity != null)
-            {
-                textQuantity.text = $"x{quantity}";
-            }
+        }
+
+        if (textQuantity != null)
+        {
+            textQuantity.text = $"x{quantity}";
         }
     }
 

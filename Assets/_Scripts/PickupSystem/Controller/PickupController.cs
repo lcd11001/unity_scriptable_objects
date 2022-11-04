@@ -9,7 +9,6 @@ public class PickupController : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        Debug.Log("PickupController::OnTriggerEnter2D " + collision.gameObject.name);
         UIPickItem pickItem = collision.GetComponent<UIPickItem>();
         if (pickItem != null)
         {
@@ -20,7 +19,7 @@ public class PickupController : MonoBehaviour
             }
             else
             {
-                pickItem.data = pickItem.data.ChangeQuantity(reminder);
+                pickItem.UpdateQuantity(reminder);
             }
         }
     }
