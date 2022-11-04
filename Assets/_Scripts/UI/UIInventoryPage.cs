@@ -24,7 +24,6 @@ namespace Inventory.UI
             // contentPanel.transform.DetachChildren();
 
             Hide();
-            ResetDraggedItem();
             itemDescription.ResetDescription();
         }
 

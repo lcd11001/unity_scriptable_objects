@@ -14,6 +14,8 @@ namespace Inventory.Model
 
         public event Action<Dictionary<int, InventoryItem>> onInventoryDataChanged;
 
+        public bool IsInventoryFull => inventoryItems.Where(x => x.IsEmpty).Count() == 0;
+
         public void Init()
         {
             inventoryItems = new List<InventoryItem>();
@@ -23,18 +25,53 @@ namespace Inventory.Model
             }
         }
 
-        public void AddItem(ItemSO item, int quantity)
+        private int AddItem(ItemSO item, int quantity)
+        {
+            if (item.IsStackable)
+            {
+                quantity -= AddItemToExistingSlot(item, quantity);
+            }
+            
+            // else
+            {
+                while(quantity > 0 && !IsInventoryFull)
+                {
+                    quantity -= AddItemToFreeSlot(item, quantity);
+                }
+            }
+
+            return quantity;
+        }
+
+        private int AddItemToExistingSlot(ItemSO item, int quantity)
+        {
+            int existIndex = inventoryItems.FindIndex(x => !x.IsEmpty && x.item.ID == item.ID && x.quantity < x.item.MaxStackSize);
+            if (existIndex != -1)
+            {
+                int prevQuantity = inventoryItems[existIndex].quantity;
+                inventoryItems[existIndex] = inventoryItems[existIndex].ChangeQuantity(quantity + prevQuantity);
+                return inventoryItems[existIndex].quantity - prevQuantity;
+            }
+            return 0;
+        }
+
+        private int AddItemToFreeSlot(ItemSO item, int quantity)
         {
             int emptyIndex = inventoryItems.FindIndex(x => x.IsEmpty);
             if (emptyIndex != -1)
             {
                 inventoryItems[emptyIndex] = InventoryItem.CreateItem(item, quantity);
+                return inventoryItems[emptyIndex].quantity;
             }
+            return 0;
         }
 
-        public void AddItem(InventoryItem inventoryItem)
+        public int AddItem(InventoryItem inventoryItem)
         {
-            AddItem(inventoryItem.item, inventoryItem.quantity);
+            int remainQuantity = AddItem(inventoryItem.item, inventoryItem.quantity);
+            NotifyChanged();
+
+            return remainQuantity;
         }
 
         public Dictionary<int, InventoryItem> GetCurrentInventoryState()
@@ -80,9 +117,26 @@ namespace Inventory.Model
             return new InventoryItem
             {
                 item = this.item,
-                quantity = newQuantity
+                quantity = Math.Min(newQuantity, this.item.MaxStackSize)
             };
         }
+
+        /**
+        // struct can not be modify value in list
+        // use ChangeQuality instead
+        public int UpdateQuantity(int delta)
+        {
+            int prevQuantity = this.quantity;
+            this.quantity = Math.Max(0, Math.Min(this.quantity + delta, this.item.MaxStackSize));
+
+            if (this.quantity == 0)
+            {
+                this.item = null;
+            }
+
+            return this.quantity;
+        }
+        */
 
         public static InventoryItem GetEmptyItem()
         {
@@ -98,7 +152,7 @@ namespace Inventory.Model
             return new InventoryItem
             {
                 item = item,
-                quantity = quantity
+                quantity = Math.Min(quantity, item.MaxStackSize)
             };
         }
     }
