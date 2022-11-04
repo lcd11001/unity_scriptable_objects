@@ -87,6 +87,15 @@ namespace Inventory.UI
             itemDescription.SetDescription(image, name, description);
         }
 
+        public void ResetAllItems()
+        {
+            foreach (var item in listUIItems)
+            {
+                item.ResetData();
+                item.Deselect();
+            }
+        }
+
         public void CreateDragItem(Sprite itemImage, int itemQuantity)
         {
             mouseFollower.Toggle(true);
@@ -113,7 +122,7 @@ namespace Inventory.UI
             }
         }
 
-        private void SelectItem(int index)
+        public void SelectItem(int index)
         {
             listUIItems[index].Select();
         }
@@ -136,7 +145,10 @@ namespace Inventory.UI
                 return;
             }
 
-            onSwapItems?.Invoke(currentDraggedItemIndex, index);
+            if (currentDraggedItemIndex != -1)
+            {
+                onSwapItems?.Invoke(currentDraggedItemIndex, index);
+            }
         }
 
         private void HandleItemBeginDrag(UIInventoryItem item)
