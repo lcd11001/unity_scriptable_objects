@@ -1,3 +1,4 @@
+using Inventory.Model;
 using UnityEditor;
 using UnityEngine;
 

@@ -22,8 +22,6 @@ namespace Inventory.UI
         private void Awake()
         {
             // contentPanel.transform.DetachChildren();
-
-            Hide();
             itemDescription.ResetDescription();
         }
 

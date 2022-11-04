@@ -34,6 +34,7 @@ namespace Inventory
         private void PrepareUI()
         {
             inventoryUI.InitInventoryUI(inventoryData.Size);
+            inventoryUI.Hide();
             RegisterEvents();
         }
 
