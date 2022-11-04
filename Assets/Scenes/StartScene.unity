@@ -5114,13 +5114,15 @@ MonoBehaviour:
   inventoryUI: {fileID: 21610753}
   inventoryData: {fileID: 11400000, guid: 7c8a5a2af1efac84c8cafb5edf47f58d, type: 2}
   initItems:
-  - quantity: 1
+  - quantity: 3
     item: {fileID: 11400000, guid: 2dab28a02d0a4794baf915fc9602c16e, type: 2}
-  - quantity: 5
+  - quantity: 95
     item: {fileID: 11400000, guid: 990ebb233000167418c8d3e51f896705, type: 2}
   - quantity: 0
     item: {fileID: 0}
   - quantity: 5
+    item: {fileID: 11400000, guid: 990ebb233000167418c8d3e51f896705, type: 2}
+  - quantity: 105
     item: {fileID: 11400000, guid: 990ebb233000167418c8d3e51f896705, type: 2}
 --- !u!1 &1738117461
 GameObject:
@@ -5535,7 +5537,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 965124188887529989, guid: bc8fcd7677098434d9d82dc8a8401605, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 0
+      value: 433.81787
       objectReference: {fileID: 0}
     - target: {fileID: 965124188887529989, guid: bc8fcd7677098434d9d82dc8a8401605, type: 3}
       propertyPath: m_SizeDelta.y
