@@ -17,7 +17,7 @@ public class UIPickItem : MonoBehaviour
 
     public InventoryItem data
     {
-        get => InventoryItem.CreateItem(item, quantity);
+        get => InventoryItem.CreateItem(item, quantity, null);
     }
 
     public void UpdateQuantity(int newQuantity)
@@ -44,6 +44,10 @@ public class UIPickItem : MonoBehaviour
         if (item != null)
         {
             GetComponent<SpriteRenderer>().sprite = item.Image;
+        }
+        else
+        {
+            GetComponent<SpriteRenderer>().sprite = null;
         }
 
         if (textQuantity != null)

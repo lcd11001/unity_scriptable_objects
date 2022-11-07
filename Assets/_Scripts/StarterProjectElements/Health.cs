@@ -32,7 +32,7 @@ public class Health : MonoBehaviour
     {
         int health = Mathf.RoundToInt(currentHealth.Value * maxHealth);
         int val = health + healthBoost;
-        currentHealth.Value = (val > maxHealth ? maxHealth : val / maxHealth);
+        currentHealth.Value = (val > maxHealth ? 1.0f : val / maxHealth);
     }
 
     private void CreateHitFeedback()
