@@ -3,7 +3,7 @@ using UnityEditor;
 using UnityEngine;
 
 // https://www.sunnyvalleystudio.com/blog/unity-2d-sprite-preview-inspector-custom-editor
-[CustomEditor(typeof(ItemSO))]
+[CustomEditor(typeof(ConsumableItemSO))]
 [CanEditMultipleObjects]
 public class ItemEditor : Editor
 {
