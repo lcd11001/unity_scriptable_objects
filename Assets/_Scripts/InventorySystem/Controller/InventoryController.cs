@@ -111,7 +111,23 @@ namespace Inventory
 
         private void HandleItemActionRequest(int index)
         {
+            InventoryItem inventoryItem = inventoryData.GetItemAt(index);
+            if (inventoryItem.IsEmpty)
+            {
+                return;
+            }
 
+            IItemAction itemAction = inventoryItem.item as IItemAction;
+            if (itemAction != null)
+            {
+                itemAction.PerformAction(gameObject);
+            }
+
+            IDestroyableItem destroyableItem = inventoryItem.item as IDestroyableItem;
+            if (destroyableItem != null)
+            {
+                inventoryData.RemoveItem(index, 1);
+            }
         }
 
         private void HandleDescriptionRequest(int index)

@@ -97,6 +97,28 @@ namespace Inventory.Model
         {
             onInventoryDataChanged?.Invoke(GetCurrentInventoryState());
         }
+
+        public void RemoveItem(int index, int amount)
+        {
+            if (index < inventoryItems.Count)
+            {
+                if (inventoryItems[index].IsEmpty)
+                {
+                    return;
+                }
+                int remaining = inventoryItems[index].quantity - amount;
+                if (remaining <= 0)
+                {
+                    inventoryItems[index] = InventoryItem.GetEmptyItem();
+                }
+                else
+                {
+                    inventoryItems[index] = inventoryItems[index].ChangeQuantity(remaining);
+                }
+                
+                NotifyChanged();
+            }
+        }
     }
 
     // Why struct?

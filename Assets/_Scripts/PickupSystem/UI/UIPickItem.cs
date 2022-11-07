@@ -45,6 +45,10 @@ public class UIPickItem : MonoBehaviour
         {
             GetComponent<SpriteRenderer>().sprite = item.Image;
         }
+        else
+        {
+            GetComponent<SpriteRenderer>().sprite = null;
+        }
 
         if (textQuantity != null)
         {

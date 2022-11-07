@@ -12,14 +12,14 @@ public class PickupController : MonoBehaviour
         UIPickItem pickItem = collision.GetComponent<UIPickItem>();
         if (pickItem != null)
         {
-            int reminder = inventoryData.AddItem(pickItem.data);
-            if (reminder == 0)
+            int remaining = inventoryData.AddItem(pickItem.data);
+            if (remaining == 0)
             {
                 pickItem.DestroyItem();
             }
             else
             {
-                pickItem.UpdateQuantity(reminder);
+                pickItem.UpdateQuantity(remaining);
             }
         }
     }
