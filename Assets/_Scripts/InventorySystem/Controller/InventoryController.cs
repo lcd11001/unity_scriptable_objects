@@ -118,16 +118,16 @@ namespace Inventory
                 return;
             }
 
-            IItemAction itemAction = inventoryItem.item as IItemAction;
-            if (itemAction != null)
-            {
-                itemAction.PerformAction(gameObject, null);
-            }
-
             IDestroyableItem destroyableItem = inventoryItem.item as IDestroyableItem;
             if (destroyableItem != null)
             {
                 inventoryData.RemoveItem(index, 1);
+            }
+
+            IItemAction itemAction = inventoryItem.item as IItemAction;
+            if (itemAction != null)
+            {
+                itemAction.PerformAction(gameObject, inventoryItem.itemState);
             }
         }
 

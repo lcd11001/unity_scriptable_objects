@@ -17,6 +17,7 @@ MonoBehaviour:
   <Name>k__BackingField: Apple
   <Description>k__BackingField: Restore Health
   <Image>k__BackingField: {fileID: 21300000, guid: e84e6f82d2ef9904c9e089ef5d2758f0, type: 3}
+  <DefaultParametersList>k__BackingField: []
   modifierData:
   - statModifier: {fileID: 11400000, guid: 104847c306fe1d1479b71dc82d5a3ff0, type: 2}
     value: 1

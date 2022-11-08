@@ -4727,6 +4727,25 @@ MonoBehaviour:
   initItems:
   - quantity: 2
     item: {fileID: 11400000, guid: 990ebb233000167418c8d3e51f896705, type: 2}
+    itemState: []
+--- !u!114 &1299310603
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1299310563}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3f1a282ef64ac0d4599f8ffea1cd44a2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  weapon: {fileID: 0}
+  inventoryData: {fileID: 11400000, guid: 7c8a5a2af1efac84c8cafb5edf47f58d, type: 2}
+  parametersToModify:
+  - itemParameter: {fileID: 11400000, guid: fb237c0dd23cf874ea58159f5b30bfe3, type: 2}
+    value: -10
+  itemCurrentState: []
 --- !u!1001 &1323551796
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4819,16 +4838,28 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7805798820339878345, guid: 38846abe9335d294dad3b5e4c4a31329, type: 3}
+      propertyPath: m_Size.x
+      value: 0.75
+      objectReference: {fileID: 0}
+    - target: {fileID: 7805798820339878345, guid: 38846abe9335d294dad3b5e4c4a31329, type: 3}
+      propertyPath: m_Size.y
+      value: 0.75
+      objectReference: {fileID: 0}
+    - target: {fileID: 7805798820339878345, guid: 38846abe9335d294dad3b5e4c4a31329, type: 3}
       propertyPath: m_Sprite
       value: 
+      objectReference: {fileID: 21300000, guid: dd3631e297d7ef341bfc48751be7ca9d, type: 3}
+    - target: {fileID: 7805798820339878345, guid: 38846abe9335d294dad3b5e4c4a31329, type: 3}
+      propertyPath: m_WasSpriteAssigned
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7805798820339878346, guid: 38846abe9335d294dad3b5e4c4a31329, type: 3}
       propertyPath: item
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 11400000, guid: 827e44c0ef137e64e8282c40ff731017, type: 2}
     - target: {fileID: 7805798820339878346, guid: 38846abe9335d294dad3b5e4c4a31329, type: 3}
       propertyPath: quantity
-      value: 5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 9094335356307837517, guid: 38846abe9335d294dad3b5e4c4a31329, type: 3}
       propertyPath: m_RootOrder

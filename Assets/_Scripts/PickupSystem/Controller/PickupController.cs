@@ -12,7 +12,7 @@ public class PickupController : MonoBehaviour
         UIPickItem pickItem = collision.GetComponent<UIPickItem>();
         if (pickItem != null)
         {
-            int remaining = inventoryData.AddItem(pickItem.data);
+            int remaining = inventoryData.AddItem(pickItem.data, pickItem.data.itemState);
             if (remaining == 0)
             {
                 pickItem.DestroyItem();
